@@ -3,7 +3,6 @@ from header_fields.request_id.request_id import RequestID
 from header_fields.protocol_version import ProtocolVersion
 from header_fields.interface_version import InterfaceVersion
 from header_fields.message_type import MessageType
-from header_fields.request_id.session_id import SessionID
 from header_fields.return_code import ReturnCode
 
 

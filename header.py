@@ -24,37 +24,34 @@ class Header:
 
     HEADER_SIZE = 16
     MAX_PAYLOAD_SIZE = 3 * (2 ** 10)  # 3KB
+    MAX_PACKET_LENGTH: int = HEADER_SIZE + MAX_PAYLOAD_SIZE
 
     def __init__(self) -> None:
         """
         Initialize a header
         """
-        # 1. MessageID [32 bit]
-        msg_id = MessageID()
-        self._msg_id = msg_id.get_msg_id()
+        # 1. MessageID [32 bit]f
+        self.msg_id: MessageID = None
 
         # 2. Length [32 bit]
         # Header size is 16 bytes
         # Max size for Payload is 3K bytes
-        self._length: int = 0
-
-        self.MAX_PACKET_LENGTH: int = self.HEADER_SIZE + self.MAX_PAYLOAD_SIZE
+        self.length: int = None
 
         # 3. RequestID [32 bit]
-        request_id = RequestID()
-        self._request_id = request_id.get_request_id()
+        self.request_id: RequestID = None
 
         # 4. Protocol Version [8 bit]
-        self._protocol_version: int = ProtocolVersion.DEFAULT
+        self.protocol_version: ProtocolVersion = None
 
         # 5. Interface Version [8 bit]
-        self._protocol_version: int = InterfaceVersion.DEFAULT
+        self.interface_version: InterfaceVersion = None
 
         # 6. Message Type [8] bit]
-        self._message_type: int = None
+        self.message_type: MessageType = None
 
         # 7. Return Code [8 bit]
-        self._return_code: int = None
+        self.return_code: ReturnCode = None
 
     def get_header_size(self) -> int:
         return self.HEADER_SIZE
@@ -63,16 +60,16 @@ class Header:
         return self.MAX_PAYLOAD_SIZE
 
     def set_message_type(self, type: MessageType):
-        self._message_type = type
+        self.message_type = type
 
     def get_message_type(self) -> MessageType:
-        return self._message_type
+        return self.message_type
 
     def set_return_code(self, code: ReturnCode) -> None:
-        self._return_code = code
+        self.return_code = code
 
     def get_return_code(self) -> ReturnCode:
-        return self._return_code
+        return self.return_code
 
     def set_length(self, packet_length: int = 0):
         """
@@ -88,10 +85,10 @@ class Header:
         except Exception as e:
             print(e)
         else:
-            self._length = packet_length
+            self.length = packet_length
 
     def get_length(self) -> int:
         """
         get length of packet
         """
-        return self._length
+        return self.length

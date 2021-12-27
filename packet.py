@@ -6,7 +6,6 @@
 AUTOSAR Protocol 'Scalable service-Oriented MiddlewarE over IP(SOME/IP)'
 """
 
-from typing import List, Tuple
 from header import Header
 
 

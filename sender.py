@@ -6,13 +6,12 @@
 Client
 """
 from typing import List, Tuple
-from packet import Packet
-
-# from enum import IntEnum
 import random
-import sys
 import socket
 import time
+
+from packet import Packet
+from length_info import LengthInfo
 
 
 class Sender:
@@ -109,18 +108,12 @@ class Sender:
         print(f"received, return code: {return_code}")
 
         # Payload
-        payload = self.sender_socket.recv(length - 16)
+        payload = self.sender_socket.recv(length - LengthInfo.HEADER_SIZE)
 
         self.header = header
         self.payload = payload
 
         return True
-
-
-class PacketSize:
-    HEADER_16: int = 16
-    MAX_PAYLOAD_3K: int = 3 * (2 ** 10)
-    MAX: int = HEADER_16 + MAX_PAYLOAD_3K
 
 
 def make_random_data(payload_length: int) -> List[int]:
@@ -130,7 +123,7 @@ def make_random_data(payload_length: int) -> List[int]:
     payload = bytearray(payload_length)
 
     for index in range(payload_length):
-        data = random.randint(0, 255)  # 1 byte for data
+        data = random.randint(1, LengthInfo.ONE_BYTE)  # 1 byte for data
         payload[index] = data
 
     return payload
@@ -140,7 +133,7 @@ def get_random_payload_size() -> int:
     """
     Generate a random number for the size of the payload
     """
-    return random.randint(0, PacketSize.MAX_PAYLOAD_3K)
+    return random.randint(0, LengthInfo.MAX_PAYLOAD_SIZE)
 
 
 def settings_for_packet(packet: Packet) -> None:
@@ -151,7 +144,7 @@ def settings_for_packet(packet: Packet) -> None:
 
     # 1. Length
     payload_length: int = get_random_payload_size()
-    header.set_packet_length(PacketSize.HEADER_16 + payload_length)
+    header.set_length(LengthInfo.HEADER_SIZE + payload_length)
 
     # 2. Message Type
     header.set_message_type(header.MessageType.RESPONSE)

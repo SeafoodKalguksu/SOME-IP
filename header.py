@@ -22,10 +22,6 @@ class Header:
     |--------------------------------------------------------------------------|
     """
 
-    HEADER_SIZE = 16
-    MAX_PAYLOAD_SIZE = 3 * (2 ** 10)  # 3KB
-    MAX_PACKET_LENGTH: int = HEADER_SIZE + MAX_PAYLOAD_SIZE
-
     def __init__(self) -> None:
         """
         Initialize a header
@@ -111,9 +107,3 @@ class Header:
 
     def set_return_code(self, code: ReturnCode) -> None:
         self.return_code = code
-
-    def get_header_size(self) -> int:
-        return self.HEADER_SIZE
-
-    def get_max_payload_size(self) -> int:
-        return self.MAX_PAYLOAD_SIZE

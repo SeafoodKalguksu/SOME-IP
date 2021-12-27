@@ -7,11 +7,7 @@ from session_id import SessionID
 
 
 class RequestID:
-    def __init__(
-        self,
-        client_id: int = ClientID.DEFAULT,
-        session_id: int = SessionID.DEFAULT,
-    ) -> None:
+    def __init__(self) -> None:
         self.client_id: ClientID = None
         self.session_id: SessionID = None
 

@@ -18,13 +18,13 @@ class Packet:
         """
         Initialize a packet
         """
-        self.header = Header()
+        self.header = None
 
         # Payload [Variable size is up to 3K]
         self.payload: bytearray = None
 
-        # length = Header(16 bytes) + payload
-        # the length info is located in Header
+        # length = Header(16 bytes) + Payload
+        # the length info is in Header
         self._length: int = None
 
     def get_header(self) -> Header:

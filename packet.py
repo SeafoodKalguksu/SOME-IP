@@ -18,7 +18,7 @@ class Packet:
         """
         Initialize a packet
         """
-        self.header = None
+        self.header = Header()
 
         # Payload [Variable size is up to 3K]
         self.payload: bytearray = None

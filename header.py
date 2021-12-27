@@ -27,7 +27,7 @@ class Header:
         Initialize a header
         """
         # 1. MessageID [32 bit]f
-        self.message_id: MessageID = None
+        self.message_id: MessageID = MessageID()
 
         # 2. Length [32 bit]
         # Header size is 16 bytes
@@ -36,7 +36,7 @@ class Header:
         self.length: int = None
 
         # 3. RequestID [32 bit]
-        self.request_id: RequestID = None
+        self.request_id: RequestID = RequestID()
 
         # 4. Protocol Version [8 bit]
         self.protocol_version: ProtocolVersion = None

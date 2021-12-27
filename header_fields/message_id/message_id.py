@@ -2,7 +2,7 @@
 # pylint: disable=missing-class-docstring
 # pylint: disable=missing-function-docstring
 
-from typing import List
+from typing import Tuple
 
 from service_id import ServiceID
 from method_id import MethodID
@@ -13,14 +13,8 @@ class MessageID:
         self.service_id: ServiceID = None
         self.method_id: MethodID = None
 
-    def get_service_id(self) -> ServiceID:
-        return self.service_id
+    def get_message_id(self) -> Tuple[ServiceID, MethodID]:
+        return self.service_id, self.method_id
 
-    def set_service_id(self, id: ServiceID) -> None:
-        self.servie_id = id
-
-    def get_method_id(self) -> MethodID:
-        return self.method_id
-
-    def set_method_id(self, id: MethodID) -> None:
-        self.method_id = id
+    def set_message_id(self, message_id: Tuple[ServiceID, MethodID]) -> None:
+        self.servie_id, self.method_id = message_id

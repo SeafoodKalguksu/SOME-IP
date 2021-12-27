@@ -3,15 +3,24 @@
 # pylint: disable=missing-function-docstring
 
 """
-Client
+Server
 """
-from typing import List, Tuple
-import random
 import socket
+import random
 import time
+import sys
+import keyboard  # pip install keyboard
+
+from header_fields.message_id.service_id import ServiceID
+from header_fields.message_id.method_id import MethodID
+from header_fields.request_id.client_id import ClientID
+from header_fields.request_id.session_id import SessionID
+from header_fields.interface_version import InterfaceVersion
+from header_fields.protocol_version import ProtocolVersion
+from header_fields.message_type import MessageType
+from header_fields.return_code import ReturnCode
 
 from packet import Packet
-from header_fields.message_type import MessageType
 from length_info import LengthInfo
 
 
@@ -28,13 +37,12 @@ class Sender:
     # def save_in_file(self, packet_bytes: bytes) -> None:
     #     self.file.write(packet_bytes)
 
-    def packet_to_bytes(self, packet: Packet) -> bytes:
+    def settings_for_sending_bytes(self, packet: Packet) -> bytes:
         length = packet.get_header().get_length()
         payoad = packet.get_payload()
 
         # Message ID
-        service_id = packet.get_header().get_message_id().get_service_id()
-        method_id = packet.get_header().get_message_id().get_method_id()
+        service_id, method_id = packet.get_header().get_message_id()
         packet_bytes = int(service_id).to_bytes(2, "big")
         packet_bytes += int(method_id).to_bytes(2, "big")
 
@@ -42,8 +50,7 @@ class Sender:
         packet_bytes += length.to_bytes(4, "big")
 
         # Request ID
-        client_id = packet.get_header().get_request_id().get_client_id()
-        session_id = packet.get_header().get_request_id().get_session_id()
+        client_id, session_id = packet.get_header().get_request_id()
         packet_bytes += int(client_id).to_bytes(2, "big")
         packet_bytes += int(session_id).to_bytes(2, "big")
 
@@ -79,7 +86,7 @@ class Sender:
         return packet_bytes
 
     def send(self, packet: Packet) -> None:
-        packet_bytes = self.packet_to_bytes(packet)
+        packet_bytes = self.settings_for_sending_bytes(packet)
         sent_size = self.sender_socket.send(packet_bytes)
         print(f"sent_size: {sent_size}")
         # self.save_in_file(packet_bytes)
@@ -119,7 +126,7 @@ class Sender:
         return True
 
 
-def make_random_data_for_payload(payload_length: int) -> bytearray:
+def get_random_data_for_payload(payload_length: int) -> bytearray:
     """
     Generate random data for payload
     """
@@ -141,33 +148,55 @@ def get_random_payload_size() -> int:
 
 def settings_for_sending_packet(packet: Packet) -> None:
     """
-    sending from sender to receiver
+    From sender to receiver
     """
     header = packet.get_header()
 
-    # 1. Length
+    # 1. Make Payload
     payload_length: int = get_random_payload_size()
+    packet.set_payload(get_random_data_for_payload(payload_length))
+
+    # 1. Message ID
+    header.set_message_id((ServiceID.DEFAULT, MethodID.DEFAULT))
+
+    # 2. Length
     header.set_length(LengthInfo.HEADER_SIZE + payload_length)
 
-    # 2. Message Type
+    # 3. Request ID
+    header.set_message_id((ClientID.DEFAULT, SessionID.DEFAULT))
+
+    # 4. Protocol version
+    header.set_protocol_version(ProtocolVersion.DEFAULT)
+
+    # 5. Interface version
+    header.set_interface_version(InterfaceVersion.DEFAULT)
+
+    # 6. Message Type
+    # Server(Sender) to Client(Receiver)
     header.set_message_type(MessageType.RESPONSE)
 
-    # 3. Payload
-    packet.set_payload(make_random_data_for_payload(payload_length))
+    # 7. Return code
+    header.set_return_code(ReturnCode.DEFAULT)
 
 
 def main():
     packet = Packet()
     sender = Sender()
 
-    # for _ in range(2):
     while True:
-        settings_for_sending_packet(packet)
-        sender.send(packet)
-        print("#################################################")
-        sender.receive()
-        print("#################################################")
-        time.sleep(1)
+        try:
+            if keyboard.is_pressed("ENTER"):
+                print("you pressed Enter key to quit")
+                sys.exit(0)
+        except:
+            break
+        else:
+            settings_for_sending_packet(packet)
+            sender.send(packet)
+            print("#################################################")
+            # sender.receive()
+            print("#################################################")
+            time.sleep(1)
 
     sender.close()
 

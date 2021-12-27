@@ -36,7 +36,8 @@ class Header:
 
         # 2. Length [32 bit]
         # Header size is 16 bytes
-        # Max size for Payload is 3K bytes
+        # Payload size is up to 3KB
+        # 'length' means packet size
         self.length: int = None
 
         # 3. RequestID [32 bit]
@@ -55,10 +56,10 @@ class Header:
         self.return_code: ReturnCode = None
 
     def get_message_id(self) -> MessageID:
-        pass
+        return self.message_id
 
-    def set_message_id(self, id: MessageID) -> None:
-        pass
+    def set_message_id(self, message_id: MessageID) -> None:
+        self.message_id = message_id
 
     def get_length(self) -> int:
         """
@@ -83,34 +84,34 @@ class Header:
             self.length = packet_length
 
     def get_request_id(self) -> RequestID:
-        pass
+        return self.request_id
 
-    def set_request_id(self, id: RequestID) -> None:
-        pass
+    def set_request_id(self, request_id: RequestID) -> None:
+        self.request_id = request_id
 
-    def get_session_id(self) -> SessionID:
-        pass
+    def get_protocol_version(self) -> ProtocolVersion:
+        return self.protocol_version
 
-    def set_session_id(self, id: SessionID) -> None:
-        pass
+    def set_protocol_version(self, version: ProtocolVersion) -> None:
+        self.protocol_version = version
 
     def get_interface_version(self) -> InterfaceVersion:
-        pass
+        return self.interface_version
 
     def set_interface_version(self, version: InterfaceVersion) -> None:
-        pass
-
-    def set_message_type(self, type: MessageType):
-        self.message_type = type
+        self.interface_version = version
 
     def get_message_type(self) -> MessageType:
         return self.message_type
 
-    def set_return_code(self, code: ReturnCode) -> None:
-        self.return_code = code
+    def set_message_type(self, type: MessageType):
+        self.message_type = type
 
     def get_return_code(self) -> ReturnCode:
         return self.return_code
+
+    def set_return_code(self, code: ReturnCode) -> None:
+        self.return_code = code
 
     def get_header_size(self) -> int:
         return self.HEADER_SIZE

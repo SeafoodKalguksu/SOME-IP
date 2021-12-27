@@ -32,7 +32,7 @@ class Header:
         Initialize a header
         """
         # 1. MessageID [32 bit]f
-        self.msg_id: MessageID = None
+        self.message_id: MessageID = None
 
         # 2. Length [32 bit]
         # Header size is 16 bytes

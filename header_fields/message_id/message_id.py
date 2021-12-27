@@ -4,8 +4,10 @@
 
 from typing import Tuple
 
-from service_id import ServiceID
-from method_id import MethodID
+# from service_id import ServiceID
+# from method_id import MethodID
+from header_fields.message_id.service_id import ServiceID
+from header_fields.message_id.method_id import MethodID
 
 
 class MessageID:

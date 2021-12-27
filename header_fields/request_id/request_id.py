@@ -2,8 +2,8 @@
 # pylint: disable=missing-class-docstring
 # pylint: disable=missing-function-docstring
 from typing import Tuple
-from client_id import ClientID
-from session_id import SessionID
+from header_fields.request_id.client_id import ClientID
+from header_fields.request_id.session_id import SessionID
 
 
 class RequestID:
@@ -14,5 +14,5 @@ class RequestID:
     def get_request_id(self) -> Tuple[ClientID, SessionID]:
         return self.client_id, self.session_id
 
-    def set_request_id(self, request_id: Tuple(ClientID, SessionID)) -> None:
+    def set_request_id(self, request_id: Tuple[ClientID, SessionID]) -> None:
         self.client_id, self.session_id = request_id

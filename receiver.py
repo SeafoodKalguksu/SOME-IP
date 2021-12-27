@@ -4,7 +4,7 @@
 
 import socket
 import time
-from some_over_ip import PacketForSOMEoverIP
+from packet import Packet
 
 """
 Server

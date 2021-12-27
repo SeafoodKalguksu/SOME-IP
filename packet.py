@@ -2,34 +2,36 @@
 # pylint: disable=missing-class-docstring
 # pylint: disable=missing-function-docstring
 
-# SOME/IP Protocol Specification
+"""
+AUTOSAR Protocol 'Scalable service-Oriented MiddlewarE over IP(SOME/IP)'
+"""
 
 from typing import List, Tuple
-from header import HeaderForSOMEoverIP
+from header import Header
 
 
-class PacketForSOMEoverIP:
+class Packet:
     """
-    AUTOSAR Protocol 'Scalable service-Oriented MiddlewarE over IP(SOME/IP)'
+    SOME/IP Protocol
     """
 
     def __init__(self) -> None:
         """
         Initialize a packet
         """
-        self._header = HeaderForSOMEoverIP()
+        self._header = Header()
 
         # Payload [Variable size is up to 3K]
         self._payload: bytearray = None
 
-        # length = HeaderForSOMEoverIP(16 bytes) + payload
-        # the length info is located in HeaderForSOMEoverIP
+        # length = Header(16 bytes) + payload
+        # the length info is located in Header
         self._length: int = None
 
     def init_header() -> None:
         pass
 
-    def get_header(self) -> HeaderForSOMEoverIP:
+    def get_header(self) -> Header:
         return self._header
 
     def get_payload(self) -> int:

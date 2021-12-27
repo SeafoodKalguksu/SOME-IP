@@ -6,7 +6,7 @@ from header_fields.message_type import MessageType
 from header_fields.return_code import ReturnCode
 
 
-class HeaderForSOMEoverIP:
+class Header:
     """
     <<--------------------------------32 bit---------------------------------->>
     |--------------------------------------------------------------------------|

@@ -6,7 +6,7 @@
 Client
 """
 from typing import List, Tuple
-from some_over_ip import PacketForSOMEoverIP
+from packet import Packet
 
 # from enum import IntEnum
 import random
@@ -28,7 +28,7 @@ class Sender:
     # def save_in_file(self, packet_bytes: bytes) -> None:
     #     self.file.write(packet_bytes)
 
-    def packet_to_bytes(self, packet: PacketForSOMEoverIP) -> bytes:
+    def packet_to_bytes(self, packet: Packet) -> bytes:
         length = packet.get_header().get_length()
         payoad = packet.get_payload()
 
@@ -76,7 +76,7 @@ class Sender:
 
         return packet_bytes
 
-    def send(self, packet: PacketForSOMEoverIP) -> None:
+    def send(self, packet: Packet) -> None:
         packet_bytes = self.packet_to_bytes(packet)
         sent_size = self.sender_socket.send(packet_bytes)
         print(f"sent_size: {sent_size}")
@@ -143,7 +143,7 @@ def get_random_payload_size() -> int:
     return random.randint(0, PacketSize.MAX_PAYLOAD_3K)
 
 
-def settings_for_packet(packet: PacketForSOMEoverIP) -> None:
+def settings_for_packet(packet: Packet) -> None:
     """
     settings for a packet
     """
@@ -161,7 +161,7 @@ def settings_for_packet(packet: PacketForSOMEoverIP) -> None:
 
 
 def main():
-    packet = PacketForSOMEoverIP()
+    packet = Packet()
     sender = Sender()
 
     # for _ in range(2):

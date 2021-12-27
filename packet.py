@@ -28,11 +28,11 @@ class Packet:
         # the length info is located in Header
         self._length: int = None
 
-    def init_header() -> None:
-        pass
-
     def get_header(self) -> Header:
         return self._header
+
+    def set_header(self) -> None:
+        pass
 
     def get_payload(self) -> int:
         return self._payload

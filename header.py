@@ -12,18 +12,18 @@ class Header:
     |--------------------------------------------------------------------------|
     |       Message ID (Service ID [16 bit] / Method ID [16 bit]) [32 bit]     |
     |--------------------------------------------------------------------------|
-    |                        Length [32 bit]                                   |
+    |              Length(= Header size + Payload size) [32bit]                |
     |--------------------------------------------------------------------------|
     |       Request ID (Client ID [16 bit] / Session ID [16 bit]) [32 bit]     |
     |--------------------------------------------------------------------------|
     | Protocol Ver.[8 bit] IF. Ver.[8 bit] Msg. Type[8 bit] Return Code [8 bit]|
     |--------------------------------------------------------------------------|
-    |                           Payload [variable size]                        |
+    |                   Payload [variable size: up to 3KB]                     |
     |--------------------------------------------------------------------------|
     """
 
     HEADER_SIZE = 16
-    MAX_PAYLOAD_SIZE = 3 * (2 ** 10)
+    MAX_PAYLOAD_SIZE = 3 * (2 ** 10)  # 3KB
 
     def __init__(self) -> None:
         """
@@ -56,6 +56,12 @@ class Header:
         # 7. Return Code [8 bit]
         self._return_code: int = None
 
+    def get_header_size(self) -> int:
+        return self.HEADER_SIZE
+
+    def get_max_payload_size(self) -> int:
+        return self.MAX_PAYLOAD_SIZE
+
     def set_message_type(self, type: MessageType):
         self._message_type = type
 
@@ -68,7 +74,10 @@ class Header:
     def get_return_code(self) -> ReturnCode:
         return self._return_code
 
-    def set_packet_length(self, packet_length: int = 0):
+    def set_length(self, packet_length: int = 0):
+        """
+        set length of packet
+        """
         try:
             if packet_length > self.MAX_PACKET_LENGTH:
                 raise Exception(
@@ -82,4 +91,7 @@ class Header:
             self._length = packet_length
 
     def get_length(self) -> int:
+        """
+        get length of packet
+        """
         return self._length

@@ -19,23 +19,23 @@ class Packet:
         """
         Initialize a packet
         """
-        self._header = Header()
+        self.header = Header()
 
         # Payload [Variable size is up to 3K]
-        self._payload: bytearray = None
+        self.payload: bytearray = None
 
         # length = Header(16 bytes) + payload
         # the length info is located in Header
         self._length: int = None
 
     def get_header(self) -> Header:
-        return self._header
+        return self.header
 
-    def set_header(self) -> None:
-        pass
+    def set_header(self, header: Header) -> None:
+        self.header = header
 
-    def get_payload(self) -> int:
-        return self._payload
+    def get_payload(self) -> bytearray:
+        return self.payload
 
-    def set_payload(self, payload) -> None:
-        self._payload = payload
+    def set_payload(self, payload: bytearray) -> None:
+        self.payload = payload

@@ -3,6 +3,7 @@ from header_fields.request_id.request_id import RequestID
 from header_fields.protocol_version import ProtocolVersion
 from header_fields.interface_version import InterfaceVersion
 from header_fields.message_type import MessageType
+from header_fields.request_id.session_id import SessionID
 from header_fields.return_code import ReturnCode
 
 
@@ -53,23 +54,17 @@ class Header:
         # 7. Return Code [8 bit]
         self.return_code: ReturnCode = None
 
-    def get_header_size(self) -> int:
-        return self.HEADER_SIZE
+    def get_message_id(self) -> MessageID:
+        pass
 
-    def get_max_payload_size(self) -> int:
-        return self.MAX_PAYLOAD_SIZE
+    def set_message_id(self, id: MessageID) -> None:
+        pass
 
-    def set_message_type(self, type: MessageType):
-        self.message_type = type
-
-    def get_message_type(self) -> MessageType:
-        return self.message_type
-
-    def set_return_code(self, code: ReturnCode) -> None:
-        self.return_code = code
-
-    def get_return_code(self) -> ReturnCode:
-        return self.return_code
+    def get_length(self) -> int:
+        """
+        get length of packet
+        """
+        return self.length
 
     def set_length(self, packet_length: int = 0):
         """
@@ -87,8 +82,38 @@ class Header:
         else:
             self.length = packet_length
 
-    def get_length(self) -> int:
-        """
-        get length of packet
-        """
-        return self.length
+    def get_request_id(self) -> RequestID:
+        pass
+
+    def set_request_id(self, id: RequestID) -> None:
+        pass
+
+    def get_session_id(self) -> SessionID:
+        pass
+
+    def set_session_id(self, id: SessionID) -> None:
+        pass
+
+    def get_interface_version(self) -> InterfaceVersion:
+        pass
+
+    def set_interface_version(self, version: InterfaceVersion) -> None:
+        pass
+
+    def set_message_type(self, type: MessageType):
+        self.message_type = type
+
+    def get_message_type(self) -> MessageType:
+        return self.message_type
+
+    def set_return_code(self, code: ReturnCode) -> None:
+        self.return_code = code
+
+    def get_return_code(self) -> ReturnCode:
+        return self.return_code
+
+    def get_header_size(self) -> int:
+        return self.HEADER_SIZE
+
+    def get_max_payload_size(self) -> int:
+        return self.MAX_PAYLOAD_SIZE

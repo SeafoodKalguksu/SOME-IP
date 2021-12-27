@@ -11,6 +11,7 @@ import socket
 import time
 
 from packet import Packet
+from header_fields.message_type import MessageType
 from length_info import LengthInfo
 
 
@@ -32,33 +33,35 @@ class Sender:
         payoad = packet.get_payload()
 
         # Message ID
-        service_id, method_id = packet.get_header().MessageID().get_msg_id()
-        packet_bytes = service_id.to_bytes(2, "big")
-        packet_bytes += method_id.to_bytes(2, "big")
+        service_id = packet.get_header().get_message_id().get_service_id()
+        method_id = packet.get_header().get_message_id().get_method_id()
+        packet_bytes = int(service_id).to_bytes(2, "big")
+        packet_bytes += int(method_id).to_bytes(2, "big")
 
         # Length
         packet_bytes += length.to_bytes(4, "big")
 
         # Request ID
-        client_id, session_id = packet.get_header().RequestID().get_request_id()
-        packet_bytes += client_id.to_bytes(2, "big")
-        packet_bytes += session_id.to_bytes(2, "big")
+        client_id = packet.get_header().get_request_id().get_client_id()
+        session_id = packet.get_header().get_request_id().get_session_id()
+        packet_bytes += int(client_id).to_bytes(2, "big")
+        packet_bytes += int(session_id).to_bytes(2, "big")
 
         # Protocol version
-        protocol_version = packet.get_header().ProtocolVersion.DEFAULT
-        packet_bytes += protocol_version.to_bytes(1, "big")
+        protocol_version = packet.get_header().get_protocol_version()
+        packet_bytes += int(protocol_version).to_bytes(1, "big")
 
         # Interface version
-        interface_version = packet.get_header().InterfaceVersion.DEFAULT
-        packet_bytes += interface_version.to_bytes(1, "big")
+        interface_version = packet.get_header().get_interface_version()
+        packet_bytes += int(interface_version).to_bytes(1, "big")
 
         # Message type
-        message_type = packet.get_header().MessageType.RESPONSE
-        packet_bytes += message_type.to_bytes(1, "big")
+        message_type = packet.get_header().get_message_type()
+        packet_bytes += int(message_type).to_bytes(1, "big")
 
         # Return code
-        return_code = packet.get_header().ReturnCode.DEFAULT
-        packet_bytes += return_code.to_bytes(1, "big")
+        return_code = packet.get_header().get_return_code()
+        packet_bytes += int(return_code).to_bytes(1, "big")
 
         # Payload
         packet_bytes += payoad
@@ -116,7 +119,7 @@ class Sender:
         return True
 
 
-def make_random_data(payload_length: int) -> List[int]:
+def make_random_data_for_payload(payload_length: int) -> bytearray:
     """
     Generate random data for payload
     """
@@ -136,9 +139,9 @@ def get_random_payload_size() -> int:
     return random.randint(0, LengthInfo.MAX_PAYLOAD_SIZE)
 
 
-def settings_for_packet(packet: Packet) -> None:
+def settings_for_sending_packet(packet: Packet) -> None:
     """
-    settings for a packet
+    sending from sender to receiver
     """
     header = packet.get_header()
 
@@ -147,10 +150,10 @@ def settings_for_packet(packet: Packet) -> None:
     header.set_length(LengthInfo.HEADER_SIZE + payload_length)
 
     # 2. Message Type
-    header.set_message_type(header.MessageType.RESPONSE)
+    header.set_message_type(MessageType.RESPONSE)
 
     # 3. Payload
-    packet.set_payload(make_random_data(payload_length))
+    packet.set_payload(make_random_data_for_payload(payload_length))
 
 
 def main():
@@ -159,7 +162,7 @@ def main():
 
     # for _ in range(2):
     while True:
-        settings_for_packet(packet)
+        settings_for_sending_packet(packet)
         sender.send(packet)
         print("#################################################")
         sender.receive()

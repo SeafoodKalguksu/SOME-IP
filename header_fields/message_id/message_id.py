@@ -9,13 +9,9 @@ from method_id import MethodID
 
 
 class MessageID:
-    def __init__(
-        self,
-        service_id: int = ServiceID.DEFAULT,
-        method_id: int = MethodID.DEFAULT,
-    ) -> None:
-        self.service_id: ServiceID = service_id
-        self.method_id: MethodID = method_id
+    def __init__(self) -> None:
+        self.service_id: ServiceID = None
+        self.method_id: MethodID = None
 
     def get_service_id(self) -> ServiceID:
         return self.service_id

@@ -12,7 +12,17 @@ class RequestID:
         client_id: int = ClientID.DEFAULT,
         session_id: int = SessionID.DEFAULT,
     ) -> None:
-        self._request_id: Tuple[int, int] = (client_id, session_id)
+        self.client_id: ClientID = None
+        self.session_id: SessionID = None
 
-    def get_request_id(self) -> Tuple[int, int]:
-        return self._request_id
+    def get_client_id(self) -> ClientID:
+        return self.client_id
+
+    def set_client_id(self, id: ClientID) -> None:
+        self.client_id = id
+
+    def get_session_id(self) -> SessionID:
+        return self.session_id
+
+    def set_session_id(self, id: SessionID) -> None:
+        self.session_id = id

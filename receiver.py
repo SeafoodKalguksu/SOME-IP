@@ -29,29 +29,7 @@ class Receiver:
         self.conn.close()
 
     def send(self) -> None:
-        # Header
-        header = int.from_bytes(self.header, "big")
-        service_id = header >> 14 * 8 & 0xFFFF
-        method_id = header >> 12 * 8 & 0xFFFF
-        length = header >> 8 * 8 & 0xFFFFFFFF
-        client_id = header >> 6 * 8 & 0xFFFF
-        session_id = header >> 4 * 8 & 0xFFFF
-        protocol_version = header >> 3 * 8 & 0xFF
-        interface_version = header >> 2 * 8 & 0xFF
-        message_type = header >> 1 * 8 & 0xFF
-        return_code = header & 0xFF
-
-        print(f"will send, service_id: {service_id}")
-        print(f"will send, method_id: {method_id}")
-        print(f"will send, length: {length}")
-        print(f"will send, client_id: {client_id}")
-        print(f"will send, session_id: {session_id}")
-        print(f"will send, protocol: {protocol_version}")
-        print(f"will send, interface: {interface_version}")
-        print(f"will send, msg type: {message_type}")
-        print(f"will send, return code: {return_code}")
-
-        self.conn.send(self.header + self.payload)
+        self.conn.send("Received the packet, send the others".encode())
 
     def receive(self, conn: socket) -> bool:
         """

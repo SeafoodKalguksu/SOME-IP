@@ -4,6 +4,7 @@ from header_fields.protocol_version import ProtocolVersion
 from header_fields.interface_version import InterfaceVersion
 from header_fields.message_type import MessageType
 from header_fields.return_code import ReturnCode
+from length_info import LengthInfo
 
 
 class Header:
@@ -67,12 +68,12 @@ class Header:
         set length of packet
         """
         try:
-            if packet_length > self.MAX_PACKET_LENGTH:
+            if packet_length > LengthInfo.MAX_PACKET_LENGTH:
                 raise Exception(
                     "length should not be greater than {self.MAX_PACKET_LENGTH} bytes."
                 )
-            elif packet_length < self.HEADER_SIZE:
-                raise Exception("length should be less than HEADER_SIZE.")
+            elif packet_length <= LengthInfo.HEADER_SIZE:
+                raise Exception("length should be greater than HEADER_SIZE.")
         except Exception as e:
             print(e)
         else:

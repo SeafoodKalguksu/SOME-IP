@@ -25,7 +25,7 @@ class Packet:
 
         # length = Header(16 bytes) + Payload
         # the length info is in Header
-        self._length: int = None
+        self.length: int = None
 
     def get_header(self) -> Header:
         return self.header

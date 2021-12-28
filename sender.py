@@ -92,36 +92,12 @@ class Sender:
         # self.save_in_file(packet_bytes)
 
     def receive(self) -> bool:
-        header_bytes = self.sender_socket.recv(16)
-        if not header_bytes:
+        message = self.sender_socket.recv(1024)
+        if not message:
             return False
 
-        header = int.from_bytes(header_bytes, "big")
-        service_id = header >> 14 * 8 & 0xFFFF
-        method_id = header >> 12 * 8 & 0xFFFF
-        length = header >> 8 * 8 & 0xFFFFFFFF
-        client_id = header >> 6 * 8 & 0xFFFF
-        session_id = header >> 4 * 8 & 0xFFFF
-        protocol_version = header >> 3 * 8 & 0xFF
-        interface_version = header >> 2 * 8 & 0xFF
-        message_type = header >> 1 * 8 & 0xFF
-        return_code = header & 0xFF
-
-        print(f"received, service_id: {service_id}")
-        print(f"received, method_id: {method_id}")
-        print(f"received, length: {length}")
-        print(f"received, client_id: {client_id}")
-        print(f"received, session_id: {session_id}")
-        print(f"received, protocol: {protocol_version}")
-        print(f"received, interface: {interface_version}")
-        print(f"received, msg type: {message_type}")
-        print(f"received, return code: {return_code}")
-
-        # Payload
-        payload = self.sender_socket.recv(length - LengthInfo.HEADER_SIZE)
-
-        self.header = header
-        self.payload = payload
+        print(message)
+        return True
 
         return True
 
@@ -133,7 +109,7 @@ def get_random_data_for_payload(payload_length: int) -> bytearray:
     payload = bytearray(payload_length)
 
     for index in range(payload_length):
-        data = random.randint(1, LengthInfo.ONE_BYTE)  # 1 byte for data
+        data = random.randint(1, LengthInfo.ONE_BYTE - 1)  # 1 byte for data
         payload[index] = data
 
     return payload
@@ -163,7 +139,7 @@ def settings_for_sending_packet(packet: Packet) -> None:
     header.set_length(LengthInfo.HEADER_SIZE + payload_length)
 
     # 3. Request ID
-    header.set_message_id((ClientID.DEFAULT, SessionID.DEFAULT))
+    header.set_request_id((ClientID.DEFAULT, SessionID.DEFAULT))
 
     # 4. Protocol version
     header.set_protocol_version(ProtocolVersion.DEFAULT)
@@ -184,19 +160,14 @@ def main():
     sender = Sender()
 
     while True:
-        try:
-            if keyboard.is_pressed("ENTER"):
-                print("you pressed Enter key to quit")
-                sys.exit(0)
-        except:
+        settings_for_sending_packet(packet)
+        print("send: #################################################")
+        sender.send(packet)
+        print("receive: #################################################")
+        if not sender.receive():
             break
-        else:
-            settings_for_sending_packet(packet)
-            sender.send(packet)
-            print("#################################################")
-            # sender.receive()
-            print("#################################################")
-            time.sleep(1)
+
+        time.sleep(1)
 
     sender.close()
 

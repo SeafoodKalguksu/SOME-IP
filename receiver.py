@@ -3,7 +3,7 @@
 # pylint: disable=missing-function-docstring
 
 import socket
-import time
+from length_info import LengthInfo
 from packet import Packet
 
 """
@@ -37,7 +37,7 @@ class Receiver:
         2. Get 'length' from the header
         3. Receive payload
         """
-        header_bytes = conn.recv(16)
+        header_bytes = conn.recv(LengthInfo.HEADER_SIZE)
         if not header_bytes:
             return False
 
@@ -108,7 +108,7 @@ class Receiver:
             + method_id
             + length
             + client_id
-            + service_id
+            + session_id
             + protocol_version
             + interface_version
             + message_type

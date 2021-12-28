@@ -9,7 +9,6 @@ import socket
 import random
 import time
 import sys
-import keyboard  # pip install keyboard
 
 from header_fields.message_id.service_id import ServiceID
 from header_fields.message_id.method_id import MethodID

@@ -122,10 +122,10 @@ def main():
 
     while True:
         if False == receiver.receive(receiver.conn):
-            receiver.send("#### The receiver failed to receive the packet ###")
+            receiver.send("NO")
             break
         else:
-            receiver.send("#### The receiver successfully received the packet ###")
+            receiver.send("YES")
 
     receiver.close()
 

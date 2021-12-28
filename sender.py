@@ -92,12 +92,8 @@ class Sender:
         # self.save_in_file(packet_bytes)
 
     def receive(self) -> bool:
-        message = self.sender_socket.recv(1024)
-        if not message:
-            return False
-
-        print(message)
-        return True
+        message = self.sender_socket.recv(1024).decode()
+        return True if message == "YES" else False
 
 
 def get_random_data_for_payload(payload_length: int) -> bytearray:
@@ -126,7 +122,7 @@ def settings_for_sending_packet(packet: Packet) -> None:
     """
     header = packet.get_header()
 
-    # 1. Make Payload
+    # Make random data for payload
     payload_length: int = get_random_payload_size()
     packet.set_payload(get_random_data_for_payload(payload_length))
 
@@ -160,10 +156,13 @@ def main():
     while True:
         settings_for_sending_packet(packet)
 
-        print("########### Sending a packet from Sender to Receiver ##########")
+        print("### Sending a packet from Sender to Receiver ###")
         sender.send(packet)
 
-        if not sender.receive():
+        if sender.receive() is True:
+            print("#### The receiver successfully received the packet ###")
+        else:
+            print("#### The receiver failed to get the packet from Sender ###")
             break
 
         time.sleep(1)

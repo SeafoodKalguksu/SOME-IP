@@ -99,8 +99,6 @@ class Sender:
         print(message)
         return True
 
-        return True
-
 
 def get_random_data_for_payload(payload_length: int) -> bytearray:
     """
@@ -161,9 +159,10 @@ def main():
 
     while True:
         settings_for_sending_packet(packet)
-        print("send: #################################################")
+
+        print("########### Sending a packet from Sender to Receiver ##########")
         sender.send(packet)
-        print("receive: #################################################")
+
         if not sender.receive():
             break
 

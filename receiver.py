@@ -28,8 +28,8 @@ class Receiver:
         # self.file.close()
         self.conn.close()
 
-    def send(self) -> None:
-        self.conn.send("Received the packet, send the others".encode())
+    def send(self, message: str) -> None:
+        self.conn.send(message.encode())
 
     def receive(self, conn: socket) -> bool:
         """
@@ -122,10 +122,10 @@ def main():
 
     while True:
         if False == receiver.receive(receiver.conn):
+            receiver.send("#### The receiver failed to receive the packet ###")
             break
         else:
-            receiver.send()
-            print("#################################################")
+            receiver.send("#### The receiver successfully received the packet ###")
 
     receiver.close()
 

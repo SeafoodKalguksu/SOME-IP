@@ -11,9 +11,6 @@ from packet import Packet
 
 class Receiver:
     def __init__(self) -> None:
-        # self.header: bytearray = None
-        # self.payload: bytearray = None
-
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.address = ("localhost", 5004)
         self.socket.bind(self.address)
@@ -21,7 +18,7 @@ class Receiver:
         self.conn, self.addr = self.socket.accept()
         print("Connected by", self.addr)
 
-    def send(self, packet: Packet) -> None:
+    def send(self, packet: Packet) -> bool:
         packet_bytes = packet.convert_packet_instance_to_bytes()
         sent_size = self.conn.send(packet_bytes)
 

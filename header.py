@@ -33,7 +33,7 @@ class Header:
         # 2. Length [32 bit]
         # Header size is 16 bytes
         # Payload size is up to 3KB
-        # 'length' means packet size
+        # 'length' means the size of the packet
         self.length: int = None
 
         # 3. RequestID [32 bit]

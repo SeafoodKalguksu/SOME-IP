@@ -57,7 +57,7 @@ class Packet:
         payload = bytearray(payload_length)
 
         for index in range(payload_length):
-            data = random.randint(1, LengthInfo.ONE_BYTE - 1)  # 1 byte for data
+            data = random.randint(0, LengthInfo.ONE_BYTE - 1)  # 1 byte for data
             payload[index] = data
 
         return payload
@@ -68,7 +68,7 @@ class Packet:
         """
         Settings for a Packet instance
         """
-        header = self.header
+        header = self.get_header()
 
         # Make random data for payload
         self.set_payload(self.make_payload_data(payload_size))
@@ -101,10 +101,10 @@ class Packet:
         """
         Convert a packet instance to bytesarray
         """
-        length = self.header.get_length()
+        length = self.get_header().get_length()
 
         # Message ID
-        service_id, method_id = self.header.get_message_id()
+        service_id, method_id = self.get_header().get_message_id()
         packet_bytes = int(service_id).to_bytes(2, "big")
         packet_bytes += int(method_id).to_bytes(2, "big")
 
@@ -112,24 +112,24 @@ class Packet:
         packet_bytes += length.to_bytes(4, "big")
 
         # Request ID
-        client_id, session_id = self.header.get_request_id()
+        client_id, session_id = self.get_header().get_request_id()
         packet_bytes += int(client_id).to_bytes(2, "big")
         packet_bytes += int(session_id).to_bytes(2, "big")
 
         # Protocol version
-        protocol_version = self.header.get_protocol_version()
+        protocol_version = self.get_header().get_protocol_version()
         packet_bytes += int(protocol_version).to_bytes(1, "big")
 
         # Interface version
-        interface_version = self.header.get_interface_version()
+        interface_version = self.get_header().get_interface_version()
         packet_bytes += int(interface_version).to_bytes(1, "big")
 
         # Message type
-        message_type = self.header.get_message_type()
+        message_type = self.get_header().get_message_type()
         packet_bytes += int(message_type).to_bytes(1, "big")
 
         # Return code
-        return_code = self.header.get_return_code()
+        return_code = self.get_header().get_return_code()
         packet_bytes += int(return_code).to_bytes(1, "big")
 
         # Payload

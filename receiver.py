@@ -3,131 +3,69 @@
 # pylint: disable=missing-function-docstring
 
 import socket
+import random
+
 from length_info import LengthInfo
 from packet import Packet
-
-"""
-Server
-"""
 
 
 class Receiver:
     def __init__(self) -> None:
-        self.header: bytearray = None
-        self.payload: bytearray = None
+        # self.header: bytearray = None
+        # self.payload: bytearray = None
 
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.address = ("localhost", 5004)
         self.socket.bind(self.address)
         self.socket.listen(1)
         self.conn, self.addr = self.socket.accept()
-        # self.file = open("received_packet.txt", "ab")
         print("Connected by", self.addr)
 
-    def close(self) -> None:
-        # self.file.close()
-        self.conn.close()
+    def send(self, packet: Packet) -> None:
+        packet_bytes = packet.convert_packet_instance_to_bytes()
+        sent_size = self.conn.send(packet_bytes)
 
-    def send(self, message: str) -> None:
-        self.conn.send(message.encode())
-
-    def receive(self, conn: socket) -> bool:
-        """
-        1. Receive header(16 bytes)
-        2. Get 'length' from the header
-        3. Receive payload
-        """
-        header_bytes = conn.recv(LengthInfo.HEADER_SIZE)
-        if not header_bytes:
+        if sent_size == packet.header.length:
+            print(
+                f"[Receiver] the packet was sent successfully, sent_size: {sent_size}"
+            )
+            packet.debug_info(packet_bytes, "R: send")
+            return True
+        else:
+            print(
+                f"[Receiver] Failed to send a packet, sent size: {sent_size}, length: {packet.header.length}"
+            )
             return False
 
-        # Header
-        header = int.from_bytes(header_bytes, "big")
-        service_id = header >> 14 * 8 & 0xFFFF
-        method_id = header >> 12 * 8 & 0xFFFF
-        length = header >> 8 * 8 & 0xFFFFFFFF
-        client_id = header >> 6 * 8 & 0xFFFF
-        session_id = header >> 4 * 8 & 0xFFFF
-        protocol_version = header >> 3 * 8 & 0xFF
-        interface_version = header >> 2 * 8 & 0xFF
-        message_type = header >> 1 * 8 & 0xFF
-        return_code = header & 0xFF
-
-        print(f"received, service_id: {service_id}")
-        print(f"received, method_id: {method_id}")
-        print(f"received, length: {length}")
-        print(f"received, client_id: {client_id}")
-        print(f"received, session_id: {session_id}")
-        print(f"received, protocol: {protocol_version}")
-        print(f"received, interface: {interface_version}")
-        print(f"received, msg type: {message_type}")
-        print(f"received, return code: {return_code}")
-        print("#################################################")
-
-        # Update message type in header to MessageType.REQUEST
-        message_type = 0x00
-        header = header & 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FF
-
-        # Payload
-        payload = conn.recv(length - 16)
-
-        self.header = header.to_bytes(16, "big")
-        self.payload = payload
-
-        # self.save_packet_in_file(
-        #     service_id,
-        #     method_id,
-        #     length,
-        #     client_id,
-        #     session_id,
-        #     protocol_version,
-        #     interface_version,
-        #     message_type,
-        #     return_code,
-        #     payload,
-        #     file,
-        # )
-        return True
-
-    def save_packet_in_file(
-        self,
-        service_id,
-        method_id,
-        length,
-        client_id,
-        session_id,
-        protocol_version,
-        interface_version,
-        message_type,
-        return_code,
-        payload,
-        file,
-    ) -> None:
-        file.write(
-            service_id
-            + method_id
-            + length
-            + client_id
-            + session_id
-            + protocol_version
-            + interface_version
-            + message_type
-            + return_code
-            + payload
-        )
+    def get_random_payload_size(self) -> int:
+        """
+        Generate a random number for the size of the payload
+        """
+        return random.randint(0, LengthInfo.MAX_PAYLOAD_SIZE)
 
 
 def main():
+    packet = Packet()
     receiver = Receiver()
 
     while True:
-        if False == receiver.receive(receiver.conn):
-            receiver.send("NO")
+        packet_bytes = receiver.conn.recv(LengthInfo.MAX_PACKET_LENGTH)
+        if not packet_bytes:
+            break
+
+        packet.debug_info(packet_bytes, "R: recv")
+
+        if not packet_bytes:
             break
         else:
-            receiver.send("YES")
+            packet.settings_for_packet(
+                receiver.get_random_payload_size(), packet.RECEIVER_TO_SENDER
+            )
 
-    receiver.close()
+            if receiver.send(packet) is False:
+                break
+
+    receiver.conn.close()
 
 
 if __name__ == "__main__":

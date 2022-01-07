@@ -21,13 +21,19 @@ from header_fields.return_code import ReturnCode
 from length_info import LengthInfo
 
 
-class Packet:
+class PacketDirection:
     """
-    SOME/IP Protocol
+    Direction between a sender and a receiver
     """
 
     SENDER_TO_RECEIVER = 1
     RECEIVER_TO_SENDER = 2
+
+
+class Packet:
+    """
+    SOME/IP Protocol
+    """
 
     def __init__(self) -> None:
         """
@@ -62,7 +68,9 @@ class Packet:
         return payload
 
     def settings_for_packet(
-        self, payload_size: int, direction=SENDER_TO_RECEIVER
+        self,
+        payload_size: int,
+        direction: PacketDirection = PacketDirection.SENDER_TO_RECEIVER,
     ) -> None:
         """
         Settings for a Packet instance
@@ -88,9 +96,9 @@ class Packet:
         header.set_interface_version(InterfaceVersion.DEFAULT)
 
         # 6. Message Type
-        if direction == self.SENDER_TO_RECEIVER:
+        if direction == PacketDirection.SENDER_TO_RECEIVER:
             header.set_message_type(MessageType.RESPONSE)
-        elif direction == self.RECEIVER_TO_SENDER:
+        elif direction == PacketDirection.RECEIVER_TO_SENDER:
             header.set_message_type(MessageType.REQUEST)
 
         # 7. Return code

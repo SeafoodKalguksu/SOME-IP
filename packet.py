@@ -35,7 +35,6 @@ class Packet:
         """
         self.header = Header()
 
-        # Payload [Variable size is up to 3K]
         self.payload: bytearray = None
 
     def get_header(self) -> Header:
@@ -57,7 +56,7 @@ class Packet:
         payload = bytearray(payload_length)
 
         for index in range(payload_length):
-            data = random.randint(0, LengthInfo.ONE_BYTE - 1)  # 1 byte for data
+            data = random.randint(1, LengthInfo.ONE_BYTE - 1)
             payload[index] = data
 
         return payload
@@ -99,7 +98,7 @@ class Packet:
 
     def convert_packet_instance_to_bytes(self) -> bytes:
         """
-        Convert a packet instance to bytesarray
+        Convert a packet instance to bytesarray for sending
         """
         length = self.get_header().get_length()
 

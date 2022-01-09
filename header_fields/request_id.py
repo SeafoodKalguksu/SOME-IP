@@ -2,8 +2,22 @@
 # pylint: disable=missing-class-docstring
 # pylint: disable=missing-function-docstring
 from typing import Tuple
-from header_fields.request_id.client_id import ClientID
-from header_fields.request_id.session_id import SessionID
+
+
+class ClientID:
+    """
+    2 bytes
+    """
+
+    DEFAULT = 0x3001
+
+
+class SessionID:
+    """
+    2 bytes
+    """
+
+    DEFAULT = 0x4001
 
 
 class RequestID:

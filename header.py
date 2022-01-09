@@ -1,9 +1,14 @@
-from header_fields.message_id.message_id import MessageID
-from header_fields.request_id.request_id import RequestID
+"""
+Header for SOME/IP
+"""
+
+from header_fields.message_id import MessageID
+from header_fields.request_id import RequestID
 from header_fields.protocol_version import ProtocolVersion
 from header_fields.interface_version import InterfaceVersion
 from header_fields.message_type import MessageType
 from header_fields.return_code import ReturnCode
+
 from length_info import LengthInfo
 
 
@@ -45,7 +50,7 @@ class Header:
         # 5. Interface Version [8 bit]
         self.interface_version: InterfaceVersion = None
 
-        # 6. Message Type [8] bit]
+        # 6. Message Type [8 bit]
         self.message_type: MessageType = None
 
         # 7. Return Code [8 bit]

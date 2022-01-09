@@ -6,24 +6,24 @@
 AUTOSAR Protocol 'Scalable service-Oriented MiddlewarE over IP(SOME/IP)'
 """
 
+
 import random
+from length_info import LengthInfo
 
 from header import Header
-from header_fields.message_id.service_id import ServiceID
-from header_fields.message_id.method_id import MethodID
-from header_fields.request_id.client_id import ClientID
-from header_fields.request_id.session_id import SessionID
+from header_fields.message_id import ServiceID
+from header_fields.message_id import MethodID
+from header_fields.request_id import ClientID
+from header_fields.request_id import SessionID
 from header_fields.interface_version import InterfaceVersion
 from header_fields.protocol_version import ProtocolVersion
 from header_fields.message_type import MessageType
 from header_fields.return_code import ReturnCode
 
-from length_info import LengthInfo
-
 
 class PacketDirection:
     """
-    Direction between a sender and a receiver
+    Direction between Sender and Receiver
     """
 
     SENDER_TO_RECEIVER = 1
@@ -32,7 +32,7 @@ class PacketDirection:
 
 class Packet:
     """
-    SOME/IP Protocol
+    For SOME/IP Protocol
     """
 
     def __init__(self) -> None:

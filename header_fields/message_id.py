@@ -4,10 +4,21 @@
 
 from typing import Tuple
 
-# from service_id import ServiceID
-# from method_id import MethodID
-from header_fields.message_id.service_id import ServiceID
-from header_fields.message_id.method_id import MethodID
+
+class ServiceID:
+    """
+    2 bytes
+    """
+
+    DEFAULT = 0x1001
+
+
+class MethodID:
+    """
+    2 bytes
+    """
+
+    DEFAULT = 0x2001
 
 
 class MessageID:

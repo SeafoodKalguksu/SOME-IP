@@ -35,7 +35,7 @@ class Sender:
         """
         Generate a random number for the size of the payload
         """
-        return random.randint(0, LengthInfo.MAX_PAYLOAD_SIZE)
+        return random.randint(1, LengthInfo.MAX_PAYLOAD_SIZE)
 
 
 def main():

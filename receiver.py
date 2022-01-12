@@ -6,7 +6,7 @@ import socket
 import random
 
 from length_info import LengthInfo
-from packet import Packet
+from packet import Packet, PacketDirection
 
 
 class Receiver:
@@ -49,14 +49,10 @@ def main():
         packet_bytes = receiver.conn.recv(LengthInfo.MAX_PACKET_LENGTH)
         if not packet_bytes:
             break
-
-        packet.debug_info(packet_bytes, "R: recv")
-
-        if not packet_bytes:
-            break
         else:
+            packet.debug_info(packet_bytes, "R: recv")
             packet.settings_for_packet(
-                receiver.get_random_payload_size(), packet.RECEIVER_TO_SENDER
+                receiver.get_random_payload_size(), PacketDirection.RECEIVER_TO_SENDER
             )
 
             if receiver.send(packet) is False:

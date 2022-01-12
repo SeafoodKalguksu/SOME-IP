@@ -8,7 +8,7 @@ import random
 import time
 
 
-from packet import Packet
+from packet import Packet, PacketDirection
 from length_info import LengthInfo
 
 
@@ -44,8 +44,9 @@ def main():
 
     while True:
         packet.settings_for_packet(
-            sender.get_random_payload_size(), packet.SENDER_TO_RECEIVER
+            sender.get_random_payload_size(), PacketDirection.SENDER_TO_RECEIVER
         )
+
         if sender.send(packet) is False:
             break
 

@@ -12,15 +12,17 @@ from packet import Packet
 
 class Host:
     def __init__(self) -> None:
-        self.socket: socket = None
-        self.host_address: str | int = None
-        self.host_port: int = None
-        self.the_other_hosts_address: Tuple[str | int] = None
-        self.connection: socket = None
+        self.socket: socket | None = None
+        self.host_address: str | int | None = None
+        self.host_port: int | None = None
+        self.the_other_hosts_address: Tuple[str | int] | None = None
+        self.connection: socket | None = None
 
     def send(self, packet: Packet) -> bool:
-        if self.socket is None or self.connection is None:
+        if self.socket is None or self.connection is None or packet is None:
             return False
+
+        return True
 
     def get_random_payload_size(self) -> int:
         """

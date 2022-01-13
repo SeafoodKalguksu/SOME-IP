@@ -4,7 +4,7 @@
 
 import socket
 import random
-from typing import List, Tuple, Any
+from typing import Tuple, Any
 
 from length_info import LengthInfo
 from packet import Packet
@@ -13,8 +13,9 @@ from packet import Packet
 class Host:
     def __init__(self) -> None:
         self.socket: socket = None
-        self.host_address: Tuple[str, int] = None
-        self.the_other_hosts_address: List[Any] = None
+        self.host_address: str | int = None
+        self.host_port: int = None
+        self.the_other_hosts_address: Tuple[str | int] = None
         self.connection: socket = None
 
     def send(self, packet: Packet) -> bool:

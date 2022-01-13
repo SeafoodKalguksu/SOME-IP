@@ -4,23 +4,27 @@
 
 import socket
 import random
+from typing import Tuple
 
 from length_info import LengthInfo
 from packet import Packet, PacketDirection
 
 
 class Receiver:
-    def __init__(self) -> None:
+    def __init__(self, address: str | int = "localhost", port: int = 5004) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.address = ("localhost", 5004)
-        self.socket.bind(self.address)
+        self.socket.bind(Tuple(address, port))
         self.socket.listen(1)
-        self.conn, self.addr = self.socket.accept()
-        print("Connected by", self.addr)
+
+        self.connection, self.sender_addr = self.socket.accept()
+        print("Connected by", self.sender_addr)
 
     def send(self, packet: Packet) -> bool:
+        if packet is not None:
+            return False
+
         packet_bytes = packet.convert_packet_instance_to_bytes()
-        sent_size = self.conn.send(packet_bytes)
+        sent_size = self.connection.send(packet_bytes)
 
         if sent_size == packet.header.length:
             print(
@@ -46,7 +50,7 @@ def main():
     receiver = Receiver()
 
     while True:
-        packet_bytes = receiver.conn.recv(LengthInfo.MAX_PACKET_LENGTH)
+        packet_bytes = receiver.connection.recv(LengthInfo.MAX_PACKET_LENGTH)
         if not packet_bytes:
             break
         else:
@@ -58,7 +62,7 @@ def main():
             if receiver.send(packet) is False:
                 break
 
-    receiver.conn.close()
+    receiver.connection.close()
 
 
 if __name__ == "__main__":

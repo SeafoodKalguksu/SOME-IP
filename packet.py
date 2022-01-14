@@ -40,8 +40,7 @@ class Packet:
         Initialize a packet
         """
         self.header = Header()
-
-        self.payload: bytearray = None
+        self.payload: bytearray | None = None
 
     def get_header(self) -> Header:
         return self.header
@@ -55,17 +54,24 @@ class Packet:
     def set_payload(self, payload: bytearray) -> None:
         self.payload = payload
 
-    def make_payload_data(self, payload_length: int) -> bytes:
+    def make_payload_data(self, payload_length: int) -> bytes | None:
         """
         Generate random data for payload
         """
-        payload = bytearray(payload_length)
+        try:
+            if payload_length < 1:
+                raise Exception("payoad length should be greater than 0.")
+        except Exception as e:
+            print(e)
+            return None
+        else:
+            payload = bytearray(payload_length)
 
-        for index in range(payload_length):
-            data = random.randint(1, LengthInfo.ONE_BYTE - 1)
-            payload[index] = data
+            for index in range(payload_length):
+                data = random.randint(1, LengthInfo.ONE_BYTE - 1)
+                payload[index] = data
 
-        return payload
+            return payload
 
     def settings_for_packet(
         self,

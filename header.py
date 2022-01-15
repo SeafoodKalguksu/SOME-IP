@@ -39,22 +39,22 @@ class Header:
         # Header size is 16 bytes
         # Payload size is up to 3KB
         # 'length' means the size of the packet
-        self.length: int = None
+        self.length: int | None = None
 
         # 3. RequestID [32 bit]
         self.request_id: RequestID = RequestID()
 
         # 4. Protocol Version [8 bit]
-        self.protocol_version: ProtocolVersion = None
+        self.protocol_version: ProtocolVersion | None = None
 
         # 5. Interface Version [8 bit]
-        self.interface_version: InterfaceVersion = None
+        self.interface_version: InterfaceVersion | None = None
 
         # 6. Message Type [8 bit]
-        self.message_type: MessageType = None
+        self.message_type: MessageType | None = None
 
         # 7. Return Code [8 bit]
-        self.return_code: ReturnCode = None
+        self.return_code: ReturnCode | None = None
 
     def get_message_id(self) -> MessageID:
         return self.message_id
@@ -62,13 +62,13 @@ class Header:
     def set_message_id(self, message_id: MessageID) -> None:
         self.message_id = message_id
 
-    def get_length(self) -> int:
+    def get_length(self) -> int | None:
         """
         get length of packet
         """
         return self.length
 
-    def set_length(self, packet_length: int = 0):
+    def set_length(self, packet_length: int):
         """
         set length of packet
         """

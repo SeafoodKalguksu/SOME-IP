@@ -23,11 +23,17 @@ class MethodID:
 
 class MessageID:
     def __init__(self) -> None:
-        self.service_id: ServiceID = None
-        self.method_id: MethodID = None
+        self.service_id: ServiceID | None = None
+        self.method_id: MethodID | None = None
 
-    def get_message_id(self) -> Tuple[ServiceID, MethodID]:
-        return self.service_id, self.method_id
+    def get_service_id(self) -> ServiceID | None:
+        return self.service_id
 
-    def set_message_id(self, message_id: Tuple[ServiceID, MethodID]) -> None:
-        self.servie_id, self.method_id = message_id
+    def set_service_id(self, service_id: ServiceID) -> None:
+        self.servie_id = service_id
+
+    def get_method_id(self) -> MethodID | None:
+        return self.method_id
+
+    def set_method_id(self, method_id: MethodID) -> None:
+        self.method_id = method_id

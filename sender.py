@@ -13,11 +13,14 @@ from length_info import LengthInfo
 
 
 class Sender:
-    def __init__(self) -> None:
+    def __init__(self, address: str | int = "localhost", port: int = 5004) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect(("localhost", 5004))
+        self.socket.connect((address, port))
 
     def send(self, packet: Packet) -> bool:
+        if not packet:
+            return False
+
         packet_bytes = packet.convert_packet_instance_to_bytes()
         sent_size = self.socket.send(packet_bytes)
 
@@ -47,7 +50,7 @@ def main():
             sender.get_random_payload_size(), PacketDirection.SENDER_TO_RECEIVER
         )
 
-        if sender.send(packet) is False:
+        if not sender.send(packet):
             break
 
         packet_bytes = sender.socket.recv(LengthInfo.MAX_PACKET_LENGTH)
@@ -55,7 +58,6 @@ def main():
             break
 
         packet.debug_info(packet_bytes, "S: recv")
-
         time.sleep(1)
 
     sender.socket.close()

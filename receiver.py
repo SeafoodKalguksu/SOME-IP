@@ -53,14 +53,14 @@ def main():
         packet_bytes = receiver.connection.recv(LengthInfo.MAX_PACKET_LENGTH)
         if not packet_bytes:
             break
-        else:
-            packet.debug_info(packet_bytes, "R: recv")
-            packet.settings_for_packet(
-                receiver.get_random_payload_size(), PacketDirection.RECEIVER_TO_SENDER
-            )
 
-            if receiver.send(packet) is False:
-                break
+        packet.debug_info(packet_bytes, "R: recv")
+        packet.settings_for_packet(
+            receiver.get_random_payload_size(), PacketDirection.RECEIVER_TO_SENDER
+        )
+
+        if not receiver.send(packet):
+            break
 
     receiver.connection.close()
 

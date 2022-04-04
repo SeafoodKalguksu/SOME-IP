@@ -21,7 +21,7 @@ from header_fields.message_type import MessageType
 from header_fields.return_code import ReturnCode
 
 
-class PacketDirection:
+class Direction:
     """
     Direction between Sender and Receiver
     """
@@ -73,10 +73,11 @@ class Packet:
 
             return payload
 
-    def settings_for_packet(
+    def setting(
         self,
+        payload: bytes,
         payload_size: int,
-        direction: PacketDirection = PacketDirection.SENDER_TO_RECEIVER,
+        direction: Direction = Direction.SENDER_TO_RECEIVER,
     ) -> None:
         """
         Settings for a Packet instance
@@ -84,7 +85,7 @@ class Packet:
         header = self.get_header()
 
         # Make random data for payload
-        self.set_payload(self.make_payload_data(payload_size))
+        self.set_payload(payload)
 
         # 1. Message ID
         header.set_message_id((ServiceID.DEFAULT, MethodID.DEFAULT))
@@ -102,9 +103,9 @@ class Packet:
         header.set_interface_version(InterfaceVersion.DEFAULT)
 
         # 6. Message Type
-        if direction == PacketDirection.SENDER_TO_RECEIVER:
+        if direction == Direction.SENDER_TO_RECEIVER:
             header.set_message_type(MessageType.RESPONSE)
-        elif direction == PacketDirection.RECEIVER_TO_SENDER:
+        elif direction == Direction.RECEIVER_TO_SENDER:
             header.set_message_type(MessageType.REQUEST)
 
         # 7. Return code

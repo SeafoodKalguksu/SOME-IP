@@ -8,7 +8,7 @@ import random
 import time
 
 
-from packet import Packet, PacketDirection
+from packet import Packet, Direction
 from length_info import LengthInfo
 
 
@@ -34,7 +34,7 @@ class Sender:
             )
             return False
 
-    def get_random_payload_size(self) -> int:
+    def get_payload_size(self) -> int:
         """
         Generate a random number for the size of the payload
         """
@@ -46,18 +46,23 @@ def main():
     sender = Sender()
 
     while True:
-        packet.settings_for_packet(
-            sender.get_random_payload_size(), PacketDirection.SENDER_TO_RECEIVER
+        # Make a packet to send
+        payload_size = sender.get_payload_size()
+        payload = packet.make_payload_data(payload_size)
+        packet.setting(
+            payload, payload_size, Direction.SENDER_TO_RECEIVER
         )
 
         if not sender.send(packet):
             break
 
+        # Receive a packet
         packet_bytes = sender.socket.recv(LengthInfo.MAX_PACKET_LENGTH)
         if not packet_bytes:
             break
-
-        packet.debug_info(packet_bytes, "S: recv")
+        else:
+            Packet().debug_info(packet_bytes, "S: recv")
+            
         time.sleep(1)
 
     sender.socket.close()

@@ -6,21 +6,25 @@ from typing import Tuple
 
 class ClientID:
     """
-    2 bytes
+    16 bit
     """
 
-    DEFAULT = 0x3001
+    DEFAULT: int = 0x3001
 
 
 class SessionID:
     """
-    2 bytes
+    16 bit
     """
 
-    DEFAULT = 0x4001
+    DEFAULT: int = 0x4001
 
 
 class RequestID:
+    """
+    (ClientID + Session ID) [32 bit]
+    """
+    
     def __init__(self) -> None:
         self.client_id: ClientID | None = None
         self.session_id: SessionID | None = None

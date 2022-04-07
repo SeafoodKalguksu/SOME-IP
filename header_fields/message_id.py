@@ -7,21 +7,24 @@ from typing import Tuple
 
 class ServiceID:
     """
-    2 bytes
+    16 bit
     """
 
-    DEFAULT = 0x1001
+    DEFAULT: int = 0x1001
 
 
 class MethodID:
     """
-    2 bytes
+    16 bit
     """
 
-    DEFAULT = 0x2001
+    DEFAULT: int = 0x2001
 
 
 class MessageID:
+    """
+    (Service ID + Method ID) [32 bit]
+    """
     def __init__(self) -> None:
         self.service_id: ServiceID | None = None
         self.method_id: MethodID | None = None

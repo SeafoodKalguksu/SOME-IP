@@ -4,18 +4,16 @@
 
 import socket
 import random
-from typing import Tuple
 
 from length_info import LengthInfo
 from packet import Packet, Direction
 
 
 class Receiver:
-    def __init__(self, address: str | int = "localhost", port: int = 5004) -> None:
+    def __init__(self, address: str = "localhost", port: int = 50004) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind(Tuple(address, port))
+        self.socket.bind((address, port))
         self.socket.listen(1)
-
         self.connection, self.sender_addr = self.socket.accept()
         print("Connected by", self.sender_addr)
 
@@ -47,7 +45,7 @@ class Receiver:
 
 def main():
     packet = Packet()
-    receiver = Receiver()
+    receiver = Receiver("192.168.0.41", 50001)
 
     while True:
         # Receive a packet

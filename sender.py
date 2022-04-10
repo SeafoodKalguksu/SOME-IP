@@ -13,7 +13,7 @@ from length_info import LengthInfo
 
 
 class Sender:
-    def __init__(self, address: str | int = "localhost", port: int = 5004) -> None:
+    def __init__(self, address: str = "localhost", port: int = 50004) -> None:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((address, port))
 
@@ -43,7 +43,7 @@ class Sender:
 
 def main():
     packet = Packet()
-    sender = Sender()
+    sender = Sender("192.168.0.41", 5001)
 
     while True:
         # Make a packet to send

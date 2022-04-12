@@ -43,7 +43,7 @@ class Sender:
 
 def main():
     packet = Packet()
-    sender = Sender("192.168.0.41", 5001)
+    sender = Sender("192.168.0.41", 50004) # connect to Receiver(L14)
 
     while True:
         # Make a packet to send
